@@ -253,6 +253,9 @@ public class Login extends javax.swing.JFrame {
             while (rs.next()){
                 u.id_level = rs.getInt("id_level");
             }
+            
+            //ini ga perlu pake if sih
+            //bisa masuk ke switch nya aja pake default
               if (u.id_level==0){
                   JOptionPane.showMessageDialog(null, "Akun Tidak Ditemukan");
               }else {
