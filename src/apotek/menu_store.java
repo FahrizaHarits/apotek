@@ -84,6 +84,7 @@ public class menu_store extends javax.swing.JFrame {
         BtnLogout1 = new javax.swing.JButton();
         sub_menu = new javax.swing.JPanel();
         MenuHome = new javax.swing.JPanel();
+        jLabel9 = new javax.swing.JLabel();
         MenuStore = new javax.swing.JPanel();
         jLabel8 = new javax.swing.JLabel();
         jScrollPane3 = new javax.swing.JScrollPane();
@@ -171,15 +172,17 @@ public class menu_store extends javax.swing.JFrame {
 
         MenuHome.setBackground(new java.awt.Color(255, 255, 255));
 
+        jLabel9.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/HOME.png"))); // NOI18N
+
         javax.swing.GroupLayout MenuHomeLayout = new javax.swing.GroupLayout(MenuHome);
         MenuHome.setLayout(MenuHomeLayout);
         MenuHomeLayout.setHorizontalGroup(
             MenuHomeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 619, Short.MAX_VALUE)
+            .addComponent(jLabel9, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         MenuHomeLayout.setVerticalGroup(
             MenuHomeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 674, Short.MAX_VALUE)
+            .addComponent(jLabel9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         sub_menu.add(MenuHome, "card2");
@@ -407,7 +410,7 @@ public class menu_store extends javax.swing.JFrame {
         // TODO add your handling code here:
         try {
             store s = new store();
-            this.stat = k.getCon().prepareStatement("update store into store values (?,?,?,?)");
+        this.stat = k.getCon().prepareStatement("update store into store values (?,?,?,?)");
             stat.setInt(1, 0);
             stat.setString(2, s.nama_barang);
             stat.setInt(3, s.harga);
@@ -471,6 +474,7 @@ public class menu_store extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JTextField klm_harga;
     private javax.swing.JTextField klm_id;
