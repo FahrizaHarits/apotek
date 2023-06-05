@@ -57,7 +57,7 @@ public class menu_store extends javax.swing.JFrame {
             this.rs = this.stat.executeQuery();
             while (rs.next()){
                 Object[] data={
-                    counter++,rs.getString(1),rs.getString(2),rs.getString(3),rs.getString(3)
+                    counter++,rs.getString(1),rs.getString(2),rs.getString(3),rs.getString(4)
                    /* rs.getInt("id_barang"),
                     rs.getString("nama_barang"),
                     rs.getInt("harga"),
