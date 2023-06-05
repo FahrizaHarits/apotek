@@ -424,13 +424,23 @@ public class menu_store extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_tombol_simpanActionPerformed
 
+    private boolean isSelected = false;
+    private int diklik;
     private void table_storeMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_table_storeMouseClicked
         // TODO add your handling code here:
-        kolom_id.setText(model.getValueAt(table_store.getSelectedRow(),1).toString());
-        kolom_nama.setText(model.getValueAt(table_store.getSelectedRow(),2).toString());
-        kolom_harga.setText(model.getValueAt(table_store.getSelectedRow(),3).toString());
-        kolom_stok.setText(model.getValueAt(table_store.getSelectedRow(),4).toString());
+        int selectedRow = table_store.getSelectedRow();
         
+        if(isSelected && diklik == selectedRow){
+            bersih();
+        }else {
+            diklik = table_store.rowAtPoint(evt.getPoint());
+            isSelected = true;
+            kolom_id.setText(model.getValueAt(table_store.getSelectedRow(),1).toString());
+            kolom_nama.setText(model.getValueAt(table_store.getSelectedRow(),2).toString());
+            kolom_harga.setText(model.getValueAt(table_store.getSelectedRow(),3).toString());
+            kolom_stok.setText(model.getValueAt(table_store.getSelectedRow(),4).toString());
+            tombol_simpan.setEnabled(false);
+        }
     }//GEN-LAST:event_table_storeMouseClicked
 
     private void tombol_editActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tombol_editActionPerformed
@@ -469,6 +479,17 @@ public class menu_store extends javax.swing.JFrame {
         kolom_stok.setText("");
     }//GEN-LAST:event_tombol_batalActionPerformed
 
+    private void bersih(){
+        kolom_id.setText("");
+        kolom_nama.setText("");
+        kolom_harga.setText("");
+        kolom_stok.setText("");
+        
+        table_store.clearSelection();
+        isSelected = false;
+        tombol_simpan.setEnabled(true);
+    }
+    
     /**
      * @param args the command line arguments
      */
