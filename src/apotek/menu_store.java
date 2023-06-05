@@ -4,6 +4,9 @@
  */
 package apotek;
 
+import java.sql.SQLDataException;
+import java.sql.Statement;
+import java.sql.Connection;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import java.sql.PreparedStatement;
@@ -24,6 +27,8 @@ public class menu_store extends javax.swing.JFrame {
      */
     public menu_store() {
         initComponents();
+        k.connect();
+        refreshTable();
     }
     
     class store extends menu_store{
@@ -31,14 +36,15 @@ public class menu_store extends javax.swing.JFrame {
         String nama_barang;
         
         public store(){
-            this.nama_barang = klm_nama.getText();
-            this.harga = Integer.parseInt(klm_harga.getText());
-            this.stok = Integer.parseInt(klm_stok.getText());
+            this.nama_barang = kolom_nama.getText();
+            this.harga = Integer.parseInt(kolom_harga.getText());
+            this.stok = Integer.parseInt(kolom_stok.getText());
         }
     }
     
     public void refreshTable(){
         model = new DefaultTableModel();
+        model.addColumn("No.");
         model.addColumn("ID Barang");
         model.addColumn("Nama Barang");
         model.addColumn("harga");
@@ -46,24 +52,26 @@ public class menu_store extends javax.swing.JFrame {
         table_store.setModel(model);
         
         try {
-            this.stat = k.getCon().prepareStatement("select * from");
+            int counter = 1;
+            this.stat = k.getCon().prepareStatement("select * from store");
             this.rs = this.stat.executeQuery();
             while (rs.next()){
                 Object[] data={
-                    rs.getInt("id_barang"),
+                    counter++,rs.getString(1),rs.getString(2),rs.getString(3),rs.getString(3)
+                   /* rs.getInt("id_barang"),
                     rs.getString("nama_barang"),
                     rs.getInt("harga"),
-                    rs.getInt("stok")
+                    rs.getInt("stok")*/
                 };
                 model.addRow(data);
             }
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, e.getMessage());
         }
-        klm_id.setText("");
-        klm_nama.setText("");
-        klm_harga.setText("");
-        klm_stok.setText("");
+        kolom_id.setText("");
+        kolom_nama.setText("");
+        kolom_harga.setText("");
+        kolom_stok.setText("");
     }
 
     /**
@@ -93,13 +101,14 @@ public class menu_store extends javax.swing.JFrame {
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
-        klm_id = new javax.swing.JTextField();
-        klm_nama = new javax.swing.JTextField();
-        klm_harga = new javax.swing.JTextField();
-        klm_stok = new javax.swing.JTextField();
-        btn_input = new javax.swing.JButton();
-        btn_update = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
+        kolom_id = new javax.swing.JTextField();
+        kolom_nama = new javax.swing.JTextField();
+        kolom_harga = new javax.swing.JTextField();
+        kolom_stok = new javax.swing.JTextField();
+        tombol_simpan = new javax.swing.JButton();
+        tombol_edit = new javax.swing.JButton();
+        tombol_hapus = new javax.swing.JButton();
+        tombol_batal = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -217,23 +226,38 @@ public class menu_store extends javax.swing.JFrame {
 
         jLabel5.setText("HARGA                         :");
 
-        jLabel6.setText("STOK MASUK              :");
+        jLabel6.setText("STOK                             :");
 
-        btn_input.setText("INPUT");
-        btn_input.addActionListener(new java.awt.event.ActionListener() {
+        kolom_id.setEditable(false);
+        kolom_id.setBackground(new java.awt.Color(153, 153, 153));
+
+        tombol_simpan.setText("SIMPAN");
+        tombol_simpan.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btn_inputActionPerformed(evt);
+                tombol_simpanActionPerformed(evt);
             }
         });
 
-        btn_update.setText("UPDATE");
-        btn_update.addActionListener(new java.awt.event.ActionListener() {
+        tombol_edit.setText("EDIT");
+        tombol_edit.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btn_updateActionPerformed(evt);
+                tombol_editActionPerformed(evt);
             }
         });
 
-        jButton3.setText("DELETE");
+        tombol_hapus.setText("HAPUS");
+        tombol_hapus.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                tombol_hapusActionPerformed(evt);
+            }
+        });
+
+        tombol_batal.setText("BATAL");
+        tombol_batal.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                tombol_batalActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout MenuStoreLayout = new javax.swing.GroupLayout(MenuStore);
         MenuStore.setLayout(MenuStoreLayout);
@@ -249,27 +273,29 @@ public class menu_store extends javax.swing.JFrame {
                         .addGroup(MenuStoreLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 551, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(MenuStoreLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                .addComponent(klm_nama, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(kolom_nama, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGroup(MenuStoreLayout.createSequentialGroup()
                                     .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                    .addComponent(klm_id, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(kolom_id, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addGroup(javax.swing.GroupLayout.Alignment.LEADING, MenuStoreLayout.createSequentialGroup()
                                     .addGroup(MenuStoreLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                                         .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                         .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, 134, Short.MAX_VALUE))
                                     .addGap(10, 10, 10)
                                     .addGroup(MenuStoreLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(klm_harga, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(klm_stok, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                        .addComponent(kolom_harga, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(kolom_stok, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)))
                                 .addComponent(jLabel6, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE))))
                     .addGroup(MenuStoreLayout.createSequentialGroup()
                         .addGap(46, 46, 46)
-                        .addComponent(btn_input)
+                        .addComponent(tombol_simpan)
                         .addGap(18, 18, 18)
-                        .addComponent(btn_update)
+                        .addComponent(tombol_edit)
                         .addGap(18, 18, 18)
-                        .addComponent(jButton3)))
+                        .addComponent(tombol_hapus)
+                        .addGap(18, 18, 18)
+                        .addComponent(tombol_batal)))
                 .addContainerGap(39, Short.MAX_VALUE))
         );
         MenuStoreLayout.setVerticalGroup(
@@ -279,25 +305,26 @@ public class menu_store extends javax.swing.JFrame {
                 .addComponent(jLabel8)
                 .addGap(48, 48, 48)
                 .addGroup(MenuStoreLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(klm_id, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(kolom_id, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(MenuStoreLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(klm_nama)
+                    .addComponent(kolom_nama)
                     .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(MenuStoreLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(klm_harga, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(kolom_harga, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGap(7, 7, 7)
                 .addGroup(MenuStoreLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(klm_stok, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(kolom_stok, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 11, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 16, Short.MAX_VALUE)
                 .addGroup(MenuStoreLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btn_input)
-                    .addComponent(btn_update)
-                    .addComponent(jButton3))
+                    .addComponent(tombol_simpan)
+                    .addComponent(tombol_edit)
+                    .addComponent(tombol_hapus)
+                    .addComponent(tombol_batal))
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 408, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
@@ -381,46 +408,66 @@ public class menu_store extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_BtnLogout1ActionPerformed
 
-    private void btn_inputActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_inputActionPerformed
+    private void tombol_simpanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tombol_simpanActionPerformed
         // TODO add your handling code here:
         try {
             store s = new store();
-            this.stat = k.getCon().prepareStatement("insert into store values (?,?,?,?)");
+            this.stat = k.getCon().prepareStatement("insert into store values (?,?,?,?)"); //memasukkan data gui ke sql
             stat.setInt(1, 0);
             stat.setString(2, s.nama_barang);
             stat.setInt(3, s.harga);
             stat.setInt(4, s.stok);
-            stat.executeUpdate();
+            stat.executeUpdate(); //memasukkan gui ke localhost
             refreshTable();
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null,e.getMessage());
         }
-    }//GEN-LAST:event_btn_inputActionPerformed
+    }//GEN-LAST:event_tombol_simpanActionPerformed
 
     private void table_storeMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_table_storeMouseClicked
         // TODO add your handling code here:
-        klm_id.setText(model.getValueAt(table_store.getSelectedRow(),0).toString());
-        klm_nama.setText(model.getValueAt(table_store.getSelectedRow(),1).toString());
-        klm_id.setText(model.getValueAt(table_store.getSelectedRow(),2).toString());
-        klm_id.setText(model.getValueAt(table_store.getSelectedRow(),3).toString());
+        kolom_id.setText(model.getValueAt(table_store.getSelectedRow(),1).toString());
+        kolom_nama.setText(model.getValueAt(table_store.getSelectedRow(),2).toString());
+        kolom_harga.setText(model.getValueAt(table_store.getSelectedRow(),3).toString());
+        kolom_stok.setText(model.getValueAt(table_store.getSelectedRow(),4).toString());
         
     }//GEN-LAST:event_table_storeMouseClicked
 
-    private void btn_updateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_updateActionPerformed
+    private void tombol_editActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tombol_editActionPerformed
         // TODO add your handling code here:
         try {
             store s = new store();
-        this.stat = k.getCon().prepareStatement("update store into store values (?,?,?,?)");
-            stat.setInt(1, 0);
-            stat.setString(2, s.nama_barang);
-            stat.setInt(3, s.harga);
-            stat.setInt(4, s.stok);
+        this.stat = k.getCon().prepareStatement("update store set harga=?," + "stok=? where id_barang=?");
+            stat.setInt(1,s.harga);
+            stat.setInt(2,s.stok);
+            stat.setInt(3, Integer.parseInt(kolom_id.getText()));
             stat.executeUpdate();
             refreshTable();
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null,e.getMessage());
         }
-    }//GEN-LAST:event_btn_updateActionPerformed
+    }//GEN-LAST:event_tombol_editActionPerformed
+
+    private void tombol_hapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tombol_hapusActionPerformed
+        // TODO add your handling code here:
+        try {
+            store s = new store();
+            this.stat = k.getCon().prepareStatement("delete from store where id_barang=?");
+            stat.setInt(1, Integer.parseInt(kolom_id.getText()));
+            stat.executeUpdate();
+            refreshTable();
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e.getMessage());
+        }
+    }//GEN-LAST:event_tombol_hapusActionPerformed
+
+    private void tombol_batalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tombol_batalActionPerformed
+        // TODO add your handling code here:
+        kolom_id.setText("");
+        kolom_nama.setText("");
+        kolom_harga.setText("");
+        kolom_stok.setText("");
+    }//GEN-LAST:event_tombol_batalActionPerformed
 
     /**
      * @param args the command line arguments
@@ -464,9 +511,6 @@ public class menu_store extends javax.swing.JFrame {
     private javax.swing.JPanel Dashboard;
     private javax.swing.JPanel MenuHome;
     private javax.swing.JPanel MenuStore;
-    private javax.swing.JButton btn_input;
-    private javax.swing.JButton btn_update;
-    private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -476,12 +520,16 @@ public class menu_store extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JScrollPane jScrollPane3;
-    private javax.swing.JTextField klm_harga;
-    private javax.swing.JTextField klm_id;
-    private javax.swing.JTextField klm_nama;
-    private javax.swing.JTextField klm_stok;
+    private javax.swing.JTextField kolom_harga;
+    private javax.swing.JTextField kolom_id;
+    private javax.swing.JTextField kolom_nama;
+    private javax.swing.JTextField kolom_stok;
     private javax.swing.JPanel main_menu;
     private javax.swing.JPanel sub_menu;
     private javax.swing.JTable table_store;
+    private javax.swing.JButton tombol_batal;
+    private javax.swing.JButton tombol_edit;
+    private javax.swing.JButton tombol_hapus;
+    private javax.swing.JButton tombol_simpan;
     // End of variables declaration//GEN-END:variables
 }
