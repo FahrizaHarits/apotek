@@ -113,6 +113,8 @@ public class menu_kasir extends javax.swing.JFrame {
     }
     
     public void refreshCombo(){
+        pilih_barang.removeAllItems();
+        pilih_barang.addItem("Pilih Barang");
         try {
             this.stat = k.getCon().prepareStatement("select * from store");
             this.rs = this.stat.executeQuery();
@@ -552,6 +554,7 @@ public class menu_kasir extends javax.swing.JFrame {
         sub_menu.add(MenuStore);
         sub_menu.repaint();
         sub_menu.revalidate();
+        refreshTable();
     }//GEN-LAST:event_BtnStoreActionPerformed
 
     private void BtnLogout1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnLogout1ActionPerformed
@@ -586,8 +589,17 @@ public class menu_kasir extends javax.swing.JFrame {
     }//GEN-LAST:event_tabel_kasirMouseClicked
 
     private void tombol_inputActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tombol_inputActionPerformed
-      try   {
+        try {
+              
               kasir ksr = new kasir();
+              this.stat = k.getCon().prepareStatement("select * from store where id_barang = " + ksr.id_barang);
+              this.rs = this.stat.executeQuery();
+              while (rs.next()){
+                  if(ksr.jumlah > rs.getInt("stok") || rs.getInt("stok") == 0){
+                      throw new Exception("stok tidak tersedia");
+                  }
+              }
+              
               this.stat = k.getCon().prepareStatement("insert into kasir (id_transaksi,id_barang,nama_barang,jumlah,harga,total) values (?,?,?,?,?,?)");
               this.stat.setInt(1,0);
               this.stat.setInt(2,ksr.id_barang);
@@ -611,10 +623,18 @@ public class menu_kasir extends javax.swing.JFrame {
 
     private void tombol_bayarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tombol_bayarActionPerformed
         // TODO add your handling code here:
-        int TotalHarga = Integer.parseInt(total_harga.getText());
-        int TotalBayar = Integer.parseInt(total_bayar.getText());
-        int Kembalian = TotalBayar - TotalHarga;
-        kembalian.setText("- Rp. "+Kembalian);
+        try{
+            int TotalHarga = Integer.parseInt(total_harga.getText());
+            int TotalBayar = Integer.parseInt(total_bayar.getText());
+            if(TotalBayar < TotalHarga){
+                throw new Exception("Jumlah uang kurang");
+            }
+            int Kembalian = TotalBayar - TotalHarga;
+            kembalian.setText("- Rp. "+Kembalian);
+        }catch(Exception e){
+            JOptionPane.showMessageDialog(null, e.getMessage());
+        }
+        
         
     }//GEN-LAST:event_tombol_bayarActionPerformed
 
@@ -625,6 +645,8 @@ public class menu_kasir extends javax.swing.JFrame {
         total_harga.setText("");
         total_bayar.setText("");
         kembalian.setText("");
+        refreshCombo(); 
+        
         
         try {
             this.stat = k.getCon().prepareStatement("Delete from kasir");

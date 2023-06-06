@@ -413,14 +413,41 @@ public class menu_store extends javax.swing.JFrame {
 
     private void tombol_simpanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tombol_simpanActionPerformed
         // TODO add your handling code here:
+        
         try {
             store s = new store();
-            this.stat = k.getCon().prepareStatement("insert into store values (?,?,?,?)"); //memasukkan data gui ke sql
-            stat.setInt(1, 0);
-            stat.setString(2, s.nama_barang);
-            stat.setInt(3, s.harga);
-            stat.setInt(4, s.stok);
-            stat.executeUpdate(); //memasukkan gui ke localhost
+            if(kolom_nama.getText().trim().isEmpty()){
+                throw new Exception("Kolom nama barang kosong");
+            }
+            String cekBarang = "SELECT * FROM store WHERE nama_barang = ?";
+            String tambahStok = "UPDATE store SET stok = stok + ? WHERE id_barang = ?";
+            PreparedStatement statement = k.getCon().prepareStatement(cekBarang);
+            statement.setString(1, s.nama_barang);
+            ResultSet resultSet = statement.executeQuery();
+            
+            if(resultSet.next()){
+                int option = JOptionPane.showConfirmDialog(null,
+                "Data sudah ada, tambah " + s.stok + " stok?",
+                "Konfirmasi",
+                JOptionPane.YES_NO_OPTION);
+
+                if (option == JOptionPane.YES_OPTION) {
+                   if((resultSet.getInt("harga")) != s.harga){
+                       throw new Exception("Harga yang anda masukkan tidak valid, jika ingin ubah harga, pilih menu edit!");
+                   }
+                   statement = k.getCon().prepareStatement(tambahStok);
+                   statement.setInt(1, s.stok);
+                   statement.setInt(2, resultSet.getInt("id_barang"));
+                   statement.executeUpdate();
+                }
+            }else{
+                this.stat = k.getCon().prepareStatement("insert into store values (?,?,?,?)"); //memasukkan data gui ke sql
+                stat.setInt(1, 0);
+                stat.setString(2, s.nama_barang);
+                stat.setInt(3, s.harga);
+                stat.setInt(4, s.stok);
+                stat.executeUpdate(); //memasukkan gui ke localhost
+            }
             refreshTable();
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null,e.getMessage());
@@ -442,7 +469,7 @@ public class menu_store extends javax.swing.JFrame {
             kolom_nama.setText(model.getValueAt(table_store.getSelectedRow(),2).toString());
             kolom_harga.setText(model.getValueAt(table_store.getSelectedRow(),3).toString());
             kolom_stok.setText(model.getValueAt(table_store.getSelectedRow(),4).toString());
-            tombol_simpan.setEnabled(false);
+            //tombol_simpan.setEnabled(false);
         }
     }//GEN-LAST:event_table_storeMouseClicked
 
