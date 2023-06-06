@@ -106,6 +106,7 @@ public class menu_kasir extends javax.swing.JFrame {
         }
         
         kolom_jumlah.setText("");
+        pilih_barang.setSelectedIndex(0);
         //total_harga.setText("");
         //total_bayar.setText("");
         //kembalian.setText("");
