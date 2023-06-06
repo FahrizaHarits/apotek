@@ -267,7 +267,7 @@ public class menu_kasir extends javax.swing.JFrame {
         );
         MenuHomeLayout.setVerticalGroup(
             MenuHomeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jLabel9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jLabel9, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 672, Short.MAX_VALUE)
         );
 
         sub_menu.add(MenuHome, "card2");
@@ -328,8 +328,18 @@ public class menu_kasir extends javax.swing.JFrame {
         jLabel7.setText("BARANG             ");
 
         tombol_bayar.setText("BAYAR");
+        tombol_bayar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                tombol_bayarActionPerformed(evt);
+            }
+        });
 
         tombol_bersih.setText("BERSIH");
+        tombol_bersih.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                tombol_bersihActionPerformed(evt);
+            }
+        });
 
         jLabel10.setText(":");
 
@@ -562,8 +572,6 @@ public class menu_kasir extends javax.swing.JFrame {
     private void tombol_inputActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tombol_inputActionPerformed
       try   {
               kasir ksr = new kasir();
-              total_harga.setText(""+ksr.total);
-              //kembalian.setText(""+ksr.kembalian);
               this.stat = k.getCon().prepareStatement("insert into kasir (id_transaksi,id_barang,nama_barang,jumlah,harga,total) values (?,?,?,?,?,?)");
               this.stat.setInt(1,0);
               this.stat.setInt(2,ksr.id_barang);
@@ -573,10 +581,42 @@ public class menu_kasir extends javax.swing.JFrame {
               this.stat.setInt(6,ksr.total);
               this.stat.executeUpdate();
               refreshTable2();
+              
+              Integer TotalHarga =0;
+              for (int i=0;i<tabel_kasir.getRowCount();i++){
+                  TotalHarga += Integer.parseInt(tabel_kasir.getValueAt(i, 5).toString());
+              }
+              total_harga.setText(TotalHarga.toString());
+              
           } catch (Exception e) {
             JOptionPane.showMessageDialog(null, e.getMessage());   
           }
     }//GEN-LAST:event_tombol_inputActionPerformed
+
+    private void tombol_bayarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tombol_bayarActionPerformed
+        // TODO add your handling code here:
+        int TotalHarga = Integer.parseInt(total_harga.getText());
+        int TotalBayar = Integer.parseInt(total_bayar.getText());
+        int Kembalian = TotalBayar - TotalHarga;
+        kembalian.setText("- Rp. "+Kembalian);
+        
+    }//GEN-LAST:event_tombol_bayarActionPerformed
+
+    private void tombol_bersihActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tombol_bersihActionPerformed
+        // TODO add your handling code here:
+        pilih_barang.setSelectedIndex(0);
+        kolom_jumlah.setText("");
+        total_harga.setText("");
+        total_bayar.setText("");
+        kembalian.setText("");
+        
+        model = (DefaultTableModel) tabel_kasir.getModel();
+        for(int i=0; 1<=tabel_kasir.getRowCount(); i++){
+            model.removeRow(i);
+        }
+        
+        
+    }//GEN-LAST:event_tombol_bersihActionPerformed
 
     /**
      * @param args the command line arguments
