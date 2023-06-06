@@ -54,14 +54,10 @@ public class menu_store extends javax.swing.JFrame {
         try {
             int counter = 1;
             this.stat = k.getCon().prepareStatement("select * from store");
-            this.rs = this.stat.executeQuery();
+            this.rs = this.stat.executeQuery(); //masukkan data dari java ke database
             while (rs.next()){
                 Object[] data={
                     counter++,rs.getString(1),rs.getString(2),rs.getString(3),rs.getString(4)
-                   /* rs.getInt("id_barang"),
-                    rs.getString("nama_barang"),
-                    rs.getInt("harga"),
-                    rs.getInt("stok")*/
                 };
                 model.addRow(data);
             }
@@ -376,6 +372,7 @@ public class menu_store extends javax.swing.JFrame {
 
     private void BtnHomeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnHomeActionPerformed
         // TODO add your handling code here:
+        //remove panel
         sub_menu.removeAll();
         sub_menu.repaint();
         sub_menu.revalidate();

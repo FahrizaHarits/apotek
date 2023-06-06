@@ -47,8 +47,6 @@ public class menu_kasir extends javax.swing.JFrame {
 //            this.uangBayar = Integer.parseInt(total_bayar.getText());
 //            this.kembalian = this.uangBayar - this.total;
             
-        
-            
         }
     }
     
@@ -523,6 +521,7 @@ public class menu_kasir extends javax.swing.JFrame {
 
     private void BtnHomeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnHomeActionPerformed
         // TODO add your handling code here:
+        //remove panel
         sub_menu.removeAll();
         sub_menu.repaint();
         sub_menu.revalidate();
