@@ -17,9 +17,9 @@ import javax.swing.table.DefaultTableModel;
  * @author fahri
  */
 public class menu_kasir extends javax.swing.JFrame {
-    private DefaultTableModel model = null;
-    private PreparedStatement stat;
-    private ResultSet rs;
+    private DefaultTableModel model = null;//digunakan untuk menyimpan data tabular yang akan ditampilkan dalam komponen JTable.
+    private PreparedStatement stat; //digunakan untuk melakukan eksekusi pernyataan SQL yang mengandung parameter
+    private ResultSet rs; //komponen yang menyimpan data hasil perintah ke database
     koneksi k = new koneksi();
     /**
      * Creates new form menu_kasir

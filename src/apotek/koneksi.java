@@ -16,6 +16,8 @@ public class koneksi {
     
     public void connect(){
         try {
+            //digunakan untuk mendapatkan objek koneksi dengan menggunakan
+            //URL, nama pengguna, dan kata sandi yang telah didefinisikan sebelumnya
             con = DriverManager.getConnection(url, username_xampp, password_xampp);
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null,e.getMessage());

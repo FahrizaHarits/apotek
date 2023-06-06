@@ -43,10 +43,6 @@
           <Dimension value="[600, 400]"/>
         </Property>
       </Properties>
-      <Events>
-        <EventHandler event="mouseDragged" listener="java.awt.event.MouseMotionListener" parameters="java.awt.event.MouseEvent" handler="Panel_LoginMouseDragged"/>
-        <EventHandler event="mousePressed" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="Panel_LoginMousePressed"/>
-      </Events>
 
       <Layout>
         <DimensionLayout dim="0">

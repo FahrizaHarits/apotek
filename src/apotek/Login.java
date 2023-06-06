@@ -15,14 +15,14 @@ import javax.swing.JOptionPane;
  * @author fahri
  */
 public class Login extends javax.swing.JFrame {
-    private PreparedStatement stat;
-    private ResultSet rs;
-    koneksi k = new koneksi();
+    private PreparedStatement stat;//query yang bakal di eksekusi
+    private ResultSet rs;//menyimpan hasil eksekusi
+    koneksi k = new koneksi();//sambungan ke database
 
   
-    public Login() {
+    public Login() {//konstruktor bawaan
         initComponents();
-        k.connect();
+        k.connect();//pas buka menu login langsung membka koneksi ketika menu login di buat
     }
 
     void bersih(){
@@ -35,10 +35,10 @@ public class Login extends javax.swing.JFrame {
         String username, password;
         
         public user(){
-            this.id_user  = 0;
+            this.id_user  = 0;//mereverensi ke objek yang sedang di akses
             this.username = klm_user.getText();
             this.password = klm_pass.getText();
-            this.id_level = 0;
+            this.id_level = 0;//0, buat reverensi kalo id nya gaa ada
             
             
         }
@@ -64,16 +64,6 @@ public class Login extends javax.swing.JFrame {
 
         Panel_Login.setBackground(new java.awt.Color(255, 255, 255));
         Panel_Login.setPreferredSize(new java.awt.Dimension(600, 400));
-        Panel_Login.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
-            public void mouseDragged(java.awt.event.MouseEvent evt) {
-                Panel_LoginMouseDragged(evt);
-            }
-        });
-        Panel_Login.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mousePressed(java.awt.event.MouseEvent evt) {
-                Panel_LoginMousePressed(evt);
-            }
-        });
 
         Logo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/LAYAR.png"))); // NOI18N
 
@@ -191,21 +181,7 @@ public class Login extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-     int xx,xy;
-     
-    private void Panel_LoginMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Panel_LoginMousePressed
-        // TODO add your handling code here:
-        xx = evt.getX();
-        xy = evt.getY();
-    }//GEN-LAST:event_Panel_LoginMousePressed
-
-    private void Panel_LoginMouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Panel_LoginMouseDragged
-        // TODO add your handling code here:
-        int x = evt.getXOnScreen();
-        int y = evt.getYOnScreen();
-        this.setLocation(x - xx, y - xy);
-    }//GEN-LAST:event_Panel_LoginMouseDragged
-
+   
     private void Btn_ExitMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Btn_ExitMouseClicked
         // TODO add your handling code here:
         dispose();
