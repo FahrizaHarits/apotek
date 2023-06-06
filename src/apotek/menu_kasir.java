@@ -6,6 +6,9 @@ package apotek;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
@@ -170,6 +173,8 @@ public class menu_kasir extends javax.swing.JFrame {
         table_store = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Menu Kasir");
+        setResizable(false);
 
         Dashboard.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
@@ -326,6 +331,8 @@ public class menu_kasir extends javax.swing.JFrame {
         });
 
         jLabel7.setText("BARANG             ");
+
+        pilih_barang.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "pilih barang" }));
 
         tombol_bayar.setText("BAYAR");
         tombol_bayar.addActionListener(new java.awt.event.ActionListener() {
@@ -505,6 +512,7 @@ public class menu_kasir extends javax.swing.JFrame {
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void BtnHomeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnHomeActionPerformed
@@ -560,13 +568,18 @@ public class menu_kasir extends javax.swing.JFrame {
        int id = Integer.parseInt( model.getValueAt(tabel_kasir.getSelectedRow(),1).toString());
        String nama = model.getValueAt(tabel_kasir.getSelectedRow(),2).toString();
        int harga = Integer.parseInt( model.getValueAt(tabel_kasir.getSelectedRow(),4).toString());
-       int stok = Integer.parseInt( model.getValueAt(tabel_kasir.getSelectedRow(),5).toString());
+       String pattern = id+":"+nama+":"+harga+":";
+       int itemCount = pilih_barang.getItemCount();
+       for (int i = 0; i < itemCount; i++) {
+           String item = pilih_barang.getItemAt(i).toString();
+           if (item.contains(pattern)) {
+            pilih_barang.setSelectedIndex(i);
+                break;
+           }
+       }
        
-       pilih_barang.setSelectedItem(id+":"+nama+":"+harga+":"+stok);
        kolom_jumlah.setText(model.getValueAt(tabel_kasir.getSelectedRow(),3).toString());
-//       total_harga.setText(model.getValueAt(tabel_kasir.getSelectedRow(),3).toString());
-//       total_bayar.setText(model.getValueAt(tabel_kasir.getSelectedRow(),4).toString());
-//       kembalian.setText(model.getValueAt(tabel_kasir.getSelectedRow(),5).toString());
+
     }//GEN-LAST:event_tabel_kasirMouseClicked
 
     private void tombol_inputActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tombol_inputActionPerformed
@@ -610,10 +623,14 @@ public class menu_kasir extends javax.swing.JFrame {
         total_bayar.setText("");
         kembalian.setText("");
         
-        model = (DefaultTableModel) tabel_kasir.getModel();
-        for(int i=0; 1<=tabel_kasir.getRowCount(); i++){
-            model.removeRow(i);
+        try {
+            this.stat = k.getCon().prepareStatement("Delete from kasir");
+            this.stat.executeUpdate();
+             refreshTable2();
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null,e.getMessage());
         }
+        
         
         
     }//GEN-LAST:event_tombol_bersihActionPerformed
