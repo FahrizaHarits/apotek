@@ -43,7 +43,7 @@ public class menu_kasir extends javax.swing.JFrame {
             this.nama_barang = arr [1];
             this.jumlah = Integer.parseInt(kolom_jumlah.getText());
             this.harga = Integer.parseInt(arr[2]);
-            this.total += this.harga * this.jumlah;
+            this.total = this.harga * this.jumlah;
 //            this.uangBayar = Integer.parseInt(total_bayar.getText());
 //            this.kembalian = this.uangBayar - this.total;
             

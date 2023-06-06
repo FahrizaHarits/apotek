@@ -64,6 +64,11 @@ public class Login extends javax.swing.JFrame {
 
         Panel_Login.setBackground(new java.awt.Color(255, 255, 255));
         Panel_Login.setPreferredSize(new java.awt.Dimension(600, 400));
+        Panel_Login.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                Panel_LoginMousePressed(evt);
+            }
+        });
 
         Logo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/LAYAR.png"))); // NOI18N
 
@@ -252,6 +257,11 @@ public class Login extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, e.getMessage());
         }
     }//GEN-LAST:event_btn_loginActionPerformed
+
+    private void Panel_LoginMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Panel_LoginMousePressed
+        // TODO add your handling code here:
+
+    }//GEN-LAST:event_Panel_LoginMousePressed
 
 
     public static void main(String args[]) {
