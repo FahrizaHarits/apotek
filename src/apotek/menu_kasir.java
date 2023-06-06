@@ -318,8 +318,10 @@ public class menu_kasir extends javax.swing.JFrame {
         jLabel14.setText("KEMBALIAN");
 
         total_harga.setEditable(false);
+        total_harga.setBackground(new java.awt.Color(204, 204, 204));
 
         kembalian.setEditable(false);
+        kembalian.setBackground(new java.awt.Color(204, 204, 204));
 
         tombol_input.setBackground(new java.awt.Color(64, 175, 134));
         tombol_input.setForeground(new java.awt.Color(255, 255, 255));
@@ -332,6 +334,7 @@ public class menu_kasir extends javax.swing.JFrame {
 
         jLabel7.setText("BARANG             ");
 
+        pilih_barang.setBackground(new java.awt.Color(204, 204, 204));
         pilih_barang.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "pilih barang" }));
 
         tombol_bayar.setText("BAYAR");
