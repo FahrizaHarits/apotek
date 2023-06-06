@@ -44,9 +44,9 @@ public class menu_store extends javax.swing.JFrame {
     
     public void refreshTable(){
         model = new DefaultTableModel();
-        model.addColumn("No.");
-        model.addColumn("ID Barang");
-        model.addColumn("Nama Barang");
+        model.addColumn("no.");
+        model.addColumn("id barang");
+        model.addColumn("nama barang");
         model.addColumn("harga");
         model.addColumn("stok");
         table_store.setModel(model);
@@ -111,6 +111,7 @@ public class menu_store extends javax.swing.JFrame {
         tombol_batal = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setResizable(false);
 
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/bg footer header.png"))); // NOI18N
 
@@ -132,7 +133,7 @@ public class menu_store extends javax.swing.JFrame {
 
         BtnStore.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         BtnStore.setForeground(new java.awt.Color(0, 153, 51));
-        BtnStore.setText("STORE");
+        BtnStore.setText("GUDANG");
         BtnStore.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 BtnStoreActionPerformed(evt);
@@ -200,7 +201,7 @@ public class menu_store extends javax.swing.JFrame {
 
         jLabel8.setFont(new java.awt.Font("Segoe UI", 1, 22)); // NOI18N
         jLabel8.setForeground(new java.awt.Color(0, 153, 102));
-        jLabel8.setText("STORE");
+        jLabel8.setText("DATA BARANG");
 
         table_store.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -229,7 +230,7 @@ public class menu_store extends javax.swing.JFrame {
         jLabel6.setText("STOK                             :");
 
         kolom_id.setEditable(false);
-        kolom_id.setBackground(new java.awt.Color(153, 153, 153));
+        kolom_id.setBackground(new java.awt.Color(204, 204, 204));
 
         tombol_simpan.setText("SIMPAN");
         tombol_simpan.addActionListener(new java.awt.event.ActionListener() {
@@ -264,39 +265,42 @@ public class menu_store extends javax.swing.JFrame {
         MenuStoreLayout.setHorizontalGroup(
             MenuStoreLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(MenuStoreLayout.createSequentialGroup()
-                .addGroup(MenuStoreLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(MenuStoreLayout.createSequentialGroup()
-                        .addGap(230, 230, 230)
-                        .addComponent(jLabel8))
+                .addGroup(MenuStoreLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(kolom_nama, javax.swing.GroupLayout.PREFERRED_SIZE, 407, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(MenuStoreLayout.createSequentialGroup()
                         .addGap(29, 29, 29)
-                        .addGroup(MenuStoreLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 551, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(MenuStoreLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                .addComponent(kolom_nama, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(MenuStoreLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(MenuStoreLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 551, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGroup(MenuStoreLayout.createSequentialGroup()
-                                    .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                    .addComponent(kolom_id, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGroup(javax.swing.GroupLayout.Alignment.LEADING, MenuStoreLayout.createSequentialGroup()
                                     .addGroup(MenuStoreLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                                         .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                         .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, 134, Short.MAX_VALUE))
                                     .addGap(10, 10, 10)
-                                    .addGroup(MenuStoreLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(kolom_harga, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(kolom_stok, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                .addComponent(jLabel6, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                    .addGroup(MenuStoreLayout.createSequentialGroup()
-                        .addGap(46, 46, 46)
+                                    .addGroup(MenuStoreLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                        .addComponent(kolom_harga, javax.swing.GroupLayout.DEFAULT_SIZE, 407, Short.MAX_VALUE)
+                                        .addComponent(kolom_stok)))
+                                .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(MenuStoreLayout.createSequentialGroup()
+                                .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(kolom_id, javax.swing.GroupLayout.PREFERRED_SIZE, 407, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                .addContainerGap(39, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, MenuStoreLayout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addGroup(MenuStoreLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, MenuStoreLayout.createSequentialGroup()
                         .addComponent(tombol_simpan)
                         .addGap(18, 18, 18)
                         .addComponent(tombol_edit)
                         .addGap(18, 18, 18)
                         .addComponent(tombol_hapus)
                         .addGap(18, 18, 18)
-                        .addComponent(tombol_batal)))
-                .addContainerGap(39, Short.MAX_VALUE))
+                        .addComponent(tombol_batal)
+                        .addGap(70, 70, 70))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, MenuStoreLayout.createSequentialGroup()
+                        .addComponent(jLabel8)
+                        .addGap(189, 189, 189))))
         );
         MenuStoreLayout.setVerticalGroup(
             MenuStoreLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -304,9 +308,9 @@ public class menu_store extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(jLabel8)
                 .addGap(48, 48, 48)
-                .addGroup(MenuStoreLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(kolom_id, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(MenuStoreLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(kolom_id, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(MenuStoreLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(kolom_nama)
@@ -319,13 +323,13 @@ public class menu_store extends javax.swing.JFrame {
                 .addGroup(MenuStoreLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(kolom_stok, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 16, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
                 .addGroup(MenuStoreLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(tombol_simpan)
                     .addComponent(tombol_edit)
                     .addComponent(tombol_hapus)
                     .addComponent(tombol_batal))
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 16, Short.MAX_VALUE)
                 .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 408, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
@@ -447,10 +451,11 @@ public class menu_store extends javax.swing.JFrame {
         // TODO add your handling code here:
         try {
             store s = new store();
-        this.stat = k.getCon().prepareStatement("update store set harga=?," + "stok=? where id_barang=?");
-            stat.setInt(1,s.harga);
-            stat.setInt(2,s.stok);
-            stat.setInt(3, Integer.parseInt(kolom_id.getText()));
+        this.stat = k.getCon().prepareStatement("update store set nama_barang=?, " + " harga=?," + "stok=? where id_barang=?");
+            stat.setString(1,s.nama_barang);
+            stat.setInt(2,s.harga);
+            stat.setInt(3,s.stok);
+            stat.setInt(4, Integer.parseInt(kolom_id.getText()));
             stat.executeUpdate();
             refreshTable();
         } catch (Exception e) {

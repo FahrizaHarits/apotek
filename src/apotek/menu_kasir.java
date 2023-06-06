@@ -4,19 +4,122 @@
  */
 package apotek;
 
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
  * @author fahri
  */
 public class menu_kasir extends javax.swing.JFrame {
-
+    private DefaultTableModel model = null;
+    private PreparedStatement stat;
+    private ResultSet rs;
+    koneksi k = new koneksi();
     /**
      * Creates new form menu_kasir
      */
     public menu_kasir() {
         initComponents();
+        k.connect();
+        refreshTable();
+        refreshTable2();
+        refreshCombo();
+    }
+    
+    class kasir extends menu_kasir{
+        int id_transaksi,id_barang,jumlah,total,uangBayar,kembalian,harga;
+        String nama_barang;
+        
+        public kasir(){
+            String combo = pilih_barang.getSelectedItem().toString();
+            String [] arr = combo.split(":"); //memecah string jadi array berdasarkan :
+            this.id_barang = Integer.parseInt(arr[0]);
+            this.nama_barang = arr [1];
+            this.jumlah = Integer.parseInt(kolom_jumlah.getText());
+            this.harga = Integer.parseInt(arr[2]);
+            this.total += this.harga * this.jumlah;
+//            this.uangBayar = Integer.parseInt(total_bayar.getText());
+//            this.kembalian = this.uangBayar - this.total;
+            
+        
+            
+        }
+    }
+    
+    public void refreshTable(){
+        model = new DefaultTableModel();
+        model.addColumn("no.");
+        model.addColumn("id barang");
+        model.addColumn("nama barang");
+        model.addColumn("harga");
+        model.addColumn("stok");
+        table_store.setModel(model);
+        
+        try {
+            int counter = 1;
+            this.stat = k.getCon().prepareStatement("select * from store");
+            this.rs = this.stat.executeQuery();
+            while (rs.next()){
+                Object[] data={
+                    counter++,rs.getString(1),rs.getString(2),rs.getString(3),rs.getString(4)
+                   /* rs.getInt("id_barang"),
+                    rs.getString("nama_barang"),
+                    rs.getInt("harga"),
+                    rs.getInt("stok")*/
+                };
+                model.addRow(data);
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e.getMessage());
+        }
+
+    }
+    
+    public void refreshTable2(){
+        model = new DefaultTableModel();
+        model.addColumn("No");
+        model.addColumn("id barang");
+        model.addColumn("nama barang");
+        model.addColumn("jumlah");
+        model.addColumn("harga");
+        model.addColumn("total");
+        tabel_kasir.setModel(model);
+        
+        try {
+            int counter = 1;
+            this.stat = k.getCon().prepareStatement("select * from kasir");
+            this.rs = this.stat.executeQuery();
+            while (rs.next()){
+                Object[] data={
+                    counter++,rs.getString(2),rs.getString(3),rs.getString(4),rs.getString(5),rs.getString(6)
+                };
+                model.addRow(data);
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e.getMessage());
+        }
+        
+        kolom_jumlah.setText("");
+        //total_harga.setText("");
+        //total_bayar.setText("");
+        //kembalian.setText("");
+
+    }
+    
+    public void refreshCombo(){
+        try {
+            this.stat = k.getCon().prepareStatement("select * from store");
+            this.rs = this.stat.executeQuery();
+            while (rs.next()){
+                pilih_barang.addItem(rs.getString("id_barang")+":"+rs.getString("nama_barang")+":"+rs.getString("harga")+":"+
+                rs.getString("stok"));
+            }
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(null, e.getMessage());
+            }
     }
 
     /**
@@ -41,33 +144,37 @@ public class menu_kasir extends javax.swing.JFrame {
         jLabel9 = new javax.swing.JLabel();
         MenuCashier = new javax.swing.JPanel();
         jLabel6 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tabel_kasir = new javax.swing.JTable();
-        kolom_harga = new javax.swing.JTextField();
         kolom_jumlah = new javax.swing.JTextField();
         jLabel12 = new javax.swing.JLabel();
         jLabel13 = new javax.swing.JLabel();
         jLabel14 = new javax.swing.JLabel();
-        total = new javax.swing.JTextField();
-        uang_bayar = new javax.swing.JTextField();
+        total_harga = new javax.swing.JTextField();
+        total_bayar = new javax.swing.JTextField();
         kembalian = new javax.swing.JTextField();
-        tombol_tambah = new javax.swing.JButton();
-        tombol_hapus = new javax.swing.JButton();
-        tombol_ubah = new javax.swing.JButton();
+        tombol_input = new javax.swing.JButton();
         jLabel7 = new javax.swing.JLabel();
-        kolom_barang = new javax.swing.JTextField();
-        kolom_id = new javax.swing.JTextField();
+        pilih_barang = new javax.swing.JComboBox<>();
+        tombol_bayar = new javax.swing.JButton();
+        tombol_bersih = new javax.swing.JButton();
+        jLabel10 = new javax.swing.JLabel();
+        jLabel11 = new javax.swing.JLabel();
+        jLabel15 = new javax.swing.JLabel();
+        jLabel16 = new javax.swing.JLabel();
+        jLabel18 = new javax.swing.JLabel();
         MenuStore = new javax.swing.JPanel();
         jLabel8 = new javax.swing.JLabel();
         jScrollPane3 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        table_store = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
+        Dashboard.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/bg footer header.png"))); // NOI18N
+        Dashboard.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 796, 60));
 
         main_menu.setBackground(new java.awt.Color(64, 175, 134));
 
@@ -87,7 +194,7 @@ public class menu_kasir extends javax.swing.JFrame {
 
         BtnCashier.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         BtnCashier.setForeground(new java.awt.Color(0, 153, 51));
-        BtnCashier.setText("CASHIER");
+        BtnCashier.setText("KASIR");
         BtnCashier.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 BtnCashierActionPerformed(evt);
@@ -96,7 +203,7 @@ public class menu_kasir extends javax.swing.JFrame {
 
         BtnStore.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         BtnStore.setForeground(new java.awt.Color(0, 153, 51));
-        BtnStore.setText("STORE");
+        BtnStore.setText("GUDANG");
         BtnStore.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 BtnStoreActionPerformed(evt);
@@ -144,6 +251,8 @@ public class menu_kasir extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
+        Dashboard.add(main_menu, new org.netbeans.lib.awtextra.AbsoluteConstraints(6, 66, -1, 668));
+
         sub_menu.setLayout(new java.awt.CardLayout());
 
         MenuHome.setBackground(new java.awt.Color(255, 255, 255));
@@ -167,13 +276,9 @@ public class menu_kasir extends javax.swing.JFrame {
 
         jLabel6.setFont(new java.awt.Font("Segoe UI", 1, 22)); // NOI18N
         jLabel6.setForeground(new java.awt.Color(0, 153, 102));
-        jLabel6.setText("CASHIER");
+        jLabel6.setText("KASIR");
 
-        jLabel3.setText("ID BARANG             :");
-
-        jLabel4.setText("HARGA BARANG    :");
-
-        jLabel5.setText("JUMLAH BARANG  :");
+        jLabel5.setText("JUMLAH BARANG  ");
 
         tabel_kasir.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -201,145 +306,132 @@ public class menu_kasir extends javax.swing.JFrame {
         });
         jScrollPane1.setViewportView(tabel_kasir);
 
-        kolom_jumlah.addActionListener(new java.awt.event.ActionListener() {
+        jLabel12.setText("TOTAL HARGA");
+
+        jLabel13.setText("TOTAL BAYAR");
+
+        jLabel14.setText("KEMBALIAN");
+
+        total_harga.setEditable(false);
+
+        kembalian.setEditable(false);
+
+        tombol_input.setBackground(new java.awt.Color(64, 175, 134));
+        tombol_input.setForeground(new java.awt.Color(255, 255, 255));
+        tombol_input.setText("INPUT");
+        tombol_input.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                kolom_jumlahActionPerformed(evt);
+                tombol_inputActionPerformed(evt);
             }
         });
 
-        jLabel12.setText("TOTAL                 :");
+        jLabel7.setText("BARANG             ");
 
-        jLabel13.setText("UANG BAYAR     :");
+        tombol_bayar.setText("BAYAR");
 
-        jLabel14.setText("KEMBALIAN        :");
+        tombol_bersih.setText("BERSIH");
 
-        tombol_tambah.setBackground(new java.awt.Color(64, 175, 134));
-        tombol_tambah.setForeground(new java.awt.Color(255, 255, 255));
-        tombol_tambah.setText("TAMBAH");
-        tombol_tambah.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                tombol_tambahActionPerformed(evt);
-            }
-        });
+        jLabel10.setText(":");
 
-        tombol_hapus.setBackground(new java.awt.Color(64, 175, 134));
-        tombol_hapus.setForeground(new java.awt.Color(255, 255, 255));
-        tombol_hapus.setText("HAPUS");
+        jLabel11.setText(":");
 
-        tombol_ubah.setBackground(new java.awt.Color(64, 175, 134));
-        tombol_ubah.setForeground(new java.awt.Color(255, 255, 255));
-        tombol_ubah.setText("SELESAI");
-        tombol_ubah.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                tombol_ubahActionPerformed(evt);
-            }
-        });
+        jLabel15.setText(":");
 
-        jLabel7.setText("NAMA BARANG     :");
+        jLabel16.setText(":");
 
-        kolom_barang.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                kolom_barangActionPerformed(evt);
-            }
-        });
-
-        kolom_id.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                kolom_idActionPerformed(evt);
-            }
-        });
+        jLabel18.setText(":");
 
         javax.swing.GroupLayout MenuCashierLayout = new javax.swing.GroupLayout(MenuCashier);
         MenuCashier.setLayout(MenuCashierLayout);
         MenuCashierLayout.setHorizontalGroup(
             MenuCashierLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, MenuCashierLayout.createSequentialGroup()
+                .addGap(18, 18, 18)
+                .addGroup(MenuCashierLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabel12)
+                    .addComponent(jLabel13, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(MenuCashierLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel15, javax.swing.GroupLayout.PREFERRED_SIZE, 11, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel16, javax.swing.GroupLayout.PREFERRED_SIZE, 11, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(MenuCashierLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(total_harga, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 208, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(MenuCashierLayout.createSequentialGroup()
+                        .addComponent(total_bayar, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(tombol_bayar)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel14)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel18, javax.swing.GroupLayout.PREFERRED_SIZE, 11, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addGroup(MenuCashierLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(tombol_bersih)
+                    .addComponent(kembalian, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(23, 23, 23))
             .addGroup(MenuCashierLayout.createSequentialGroup()
                 .addGroup(MenuCashierLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(MenuCashierLayout.createSequentialGroup()
-                        .addGap(242, 242, 242)
+                        .addGap(272, 272, 272)
                         .addComponent(jLabel6))
                     .addGroup(MenuCashierLayout.createSequentialGroup()
-                        .addGap(20, 20, 20)
-                        .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(30, 30, 30)
-                        .addComponent(kolom_id, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(52, 52, 52)
-                        .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(10, 10, 10)
-                        .addComponent(total, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(24, 24, 24)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 575, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(MenuCashierLayout.createSequentialGroup()
-                        .addGap(20, 20, 20)
-                        .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(30, 30, 30)
-                        .addComponent(kolom_barang, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(50, 50, 50)
-                        .addComponent(jLabel13, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(12, 12, 12)
-                        .addComponent(uang_bayar, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(MenuCashierLayout.createSequentialGroup()
-                        .addGap(20, 20, 20)
+                        .addGap(83, 83, 83)
                         .addGroup(MenuCashierLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(MenuCashierLayout.createSequentialGroup()
-                                .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(30, 30, 30)
-                                .addComponent(kolom_harga, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(50, 50, 50)
-                                .addComponent(jLabel14, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(6, 6, 6)
+                                .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 11, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(12, 12, 12)
-                                .addComponent(kembalian, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(pilih_barang, javax.swing.GroupLayout.PREFERRED_SIZE, 297, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(MenuCashierLayout.createSequentialGroup()
-                                .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(kolom_jumlah, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(30, 30, 30)
-                                .addComponent(tombol_tambah, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(tombol_ubah, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(tombol_hapus, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 575, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(25, Short.MAX_VALUE))
+                                .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(6, 6, 6)
+                                .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 11, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(12, 12, 12)
+                                .addComponent(kolom_jumlah, javax.swing.GroupLayout.PREFERRED_SIZE, 188, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(12, 12, 12)
+                                .addComponent(tombol_input, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                .addContainerGap(22, Short.MAX_VALUE))
         );
         MenuCashierLayout.setVerticalGroup(
             MenuCashierLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(MenuCashierLayout.createSequentialGroup()
-                .addGap(6, 6, 6)
                 .addComponent(jLabel6)
-                .addGap(34, 34, 34)
+                .addGap(52, 52, 52)
                 .addGroup(MenuCashierLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(MenuCashierLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(kolom_id, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(total, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(pilih_barang, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(14, 14, 14)
+                .addGroup(MenuCashierLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(MenuCashierLayout.createSequentialGroup()
-                        .addGap(4, 4, 4)
-                        .addComponent(jLabel12)))
-                .addGap(18, 18, 18)
-                .addGroup(MenuCashierLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(MenuCashierLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(kolom_barang, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jLabel13, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(uang_bayar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(MenuCashierLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(MenuCashierLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(kolom_harga, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jLabel14, javax.swing.GroupLayout.PREFERRED_SIZE, 19, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(kembalian, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(MenuCashierLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(MenuCashierLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(kolom_jumlah, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(1, 1, 1)
                         .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(MenuCashierLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(tombol_ubah)
-                        .addComponent(tombol_hapus)
-                        .addComponent(tombol_tambah)))
+                    .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(kolom_jumlah, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(tombol_input))
                 .addGap(18, 18, 18)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 392, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(45, Short.MAX_VALUE))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 391, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
+                .addGroup(MenuCashierLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(total_harga, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel15, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(kembalian, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel14, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel18, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(MenuCashierLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel13, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(total_bayar, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel16, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(tombol_bayar, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(tombol_bersih, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(24, 24, 24))
         );
 
         sub_menu.add(MenuCashier, "card3");
@@ -348,9 +440,9 @@ public class menu_kasir extends javax.swing.JFrame {
 
         jLabel8.setFont(new java.awt.Font("Segoe UI", 1, 22)); // NOI18N
         jLabel8.setForeground(new java.awt.Color(0, 153, 102));
-        jLabel8.setText("STORE");
+        jLabel8.setText("DATA BARANG");
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        table_store.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -361,7 +453,7 @@ public class menu_kasir extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        jScrollPane3.setViewportView(jTable1);
+        jScrollPane3.setViewportView(table_store);
 
         javax.swing.GroupLayout MenuStoreLayout = new javax.swing.GroupLayout(MenuStore);
         MenuStore.setLayout(MenuStoreLayout);
@@ -384,35 +476,12 @@ public class menu_kasir extends javax.swing.JFrame {
                 .addComponent(jLabel8)
                 .addGap(44, 44, 44)
                 .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 490, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(98, Short.MAX_VALUE))
+                .addContainerGap(102, Short.MAX_VALUE))
         );
 
         sub_menu.add(MenuStore, "card4");
 
-        javax.swing.GroupLayout DashboardLayout = new javax.swing.GroupLayout(Dashboard);
-        Dashboard.setLayout(DashboardLayout);
-        DashboardLayout.setHorizontalGroup(
-            DashboardLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(DashboardLayout.createSequentialGroup()
-                .addGroup(DashboardLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(DashboardLayout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(main_menu, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(sub_menu, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
-                .addContainerGap())
-        );
-        DashboardLayout.setVerticalGroup(
-            DashboardLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(DashboardLayout.createSequentialGroup()
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(DashboardLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(main_menu, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(sub_menu, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap())
-        );
+        Dashboard.add(sub_menu, new org.netbeans.lib.awtextra.AbsoluteConstraints(175, 66, -1, -1));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -478,95 +547,36 @@ public class menu_kasir extends javax.swing.JFrame {
     }//GEN-LAST:event_BtnLogout1ActionPerformed
 
     private void tabel_kasirMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tabel_kasirMouseClicked
-        // TODO add your handling code here:
-        // Menampilkan pada kolom yang di isi pada saat tabel di klik
-        int baris = tabel_kasir .rowAtPoint(evt.getPoint()); //evt itu parameter diatasnya jadi ikut aja
-
-        String id = tabel_kasir.getValueAt(baris, 1).toString();
-        //taro nilai yg di klik di textfield (ID)
-        kolom_id.setText(id);
-
-        //get ID
-        String harga = tabel_kasir.getValueAt(baris, 2).toString();
-        //taro nilai yg di klik di textfield (ID)
-        kolom_harga.setText(harga);
-
-        //get nama
-        String jumlah = tabel_kasir.getValueAt(baris, 3).toString();
-        //taro nilai yg di klik di textfield (inputan nama)
-        kolom_jumlah.setText(jumlah);
+       int id = Integer.parseInt( model.getValueAt(tabel_kasir.getSelectedRow(),1).toString());
+       String nama = model.getValueAt(tabel_kasir.getSelectedRow(),2).toString();
+       int harga = Integer.parseInt( model.getValueAt(tabel_kasir.getSelectedRow(),4).toString());
+       int stok = Integer.parseInt( model.getValueAt(tabel_kasir.getSelectedRow(),5).toString());
+       
+       pilih_barang.setSelectedItem(id+":"+nama+":"+harga+":"+stok);
+       kolom_jumlah.setText(model.getValueAt(tabel_kasir.getSelectedRow(),3).toString());
+//       total_harga.setText(model.getValueAt(tabel_kasir.getSelectedRow(),3).toString());
+//       total_bayar.setText(model.getValueAt(tabel_kasir.getSelectedRow(),4).toString());
+//       kembalian.setText(model.getValueAt(tabel_kasir.getSelectedRow(),5).toString());
     }//GEN-LAST:event_tabel_kasirMouseClicked
 
-    private void kolom_jumlahActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_kolom_jumlahActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_kolom_jumlahActionPerformed
-
-    private void tombol_tambahActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tombol_tambahActionPerformed
-        // TODO add your handling code here:
-        
-        /*String id = kolom_id.getText();
-        String harga = kolom_harga.getText();
-        String jumlah = kolom_jumlah.getText();
-
-        // if else ini biar data belum ke input ga bisa klik 'tambah'
-        if (id.equals("")){
-            JOptionPane.showMessageDialog(null,"Isi pilihan Terlebih Dahulu");
-        }else if(harga.equals("")){
-            JOptionPane.showMessageDialog(null,"Isi harga Terlebih Dahulu");
-        }else if (jumlah.equals("")){
-            JOptionPane.showMessageDialog(null,"Isi jumlah Terlebih Dahulu");
-        }else{
-            try {
-                String Q = "Insert into kasir (nama_barang,harga,jumlah) Values ('"+id+"','"+harga+"','"+jumlah+"')";
-                java.sql.Connection Vconn = (Connection)KoneksiDB.konfigDB(); //memanggil fungsi koneksi database
-                java.sql.PreparedStatement s = Vconn.prepareStatement(Q); //mengirimkan parameter
-                s.execute(); //eksekusi sql
-                JOptionPane.showMessageDialog(null,"Tambah Data Berhasi");
-            }catch (Exception e){
-                JOptionPane.showMessageDialog(null,"Tambah Data Gagal");
-                JOptionPane.showMessageDialog(this, e.getMessage());
-            }
-            tampil_table(); //agar membuat data otomatis ke reload, panggil tampil table di action ini
-            bersih(); // agar setelah klik dan berhasil inputannya text inputan kosong seperti semula lagi
-        }*/
-    }//GEN-LAST:event_tombol_tambahActionPerformed
-
-    private void tombol_ubahActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tombol_ubahActionPerformed
-        // TODO add your handling code here:
-        /*String id = kolom_id.getText();
-        String harga = kolom_harga.getText();
-        String jumlah = kolom_jumlah.getText();
-
-        // if else ini biar belum input apa2 ga bisa klik 'ubah'
-        if (id.equals("")){
-            JOptionPane.showMessageDialog(null,"Isi pilihan Terlebih Dahulu");
-        }else if(harga.equals("")){
-            JOptionPane.showMessageDialog(null,"Isi harga Terlebih Dahulu");
-        }else if (jumlah.equals("")){
-            JOptionPane.showMessageDialog(null,"Isi jumlah Terlebih Dahulu");
-        }else{
-            try {
-                String Vsql = "UPDATE karyawan SET nama_barang = '"+id+"', id_barang = '"+harga+"', jumlah = '"+jumlah+"' WHERE nama_barang = '"+id+"'";
-                java.sql.Connection Vconn = (Connection)KoneksiDB.konfigDB(); //memanggil fungsi koneksi di kelas lainnya
-                java.sql.PreparedStatement pst = Vconn.prepareStatement(Vsql); //mengirimkan parameter ke fungsi java sql
-                pst.execute(); //execute sql
-                JOptionPane.showMessageDialog(null, "Ubah data berhasil");
-                tampil_table();
-                bersih();
-            } catch (Exception e){
-                JOptionPane.showMessageDialog(null, "Ubah data gagal");
-                JOptionPane.showMessageDialog(this, e.getMessage());
-            }
-        }*/
-    }//GEN-LAST:event_tombol_ubahActionPerformed
-
-    private void kolom_barangActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_kolom_barangActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_kolom_barangActionPerformed
-
-    private void kolom_idActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_kolom_idActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_kolom_idActionPerformed
+    private void tombol_inputActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tombol_inputActionPerformed
+      try   {
+              kasir ksr = new kasir();
+              total_harga.setText(""+ksr.total);
+              //kembalian.setText(""+ksr.kembalian);
+              this.stat = k.getCon().prepareStatement("insert into kasir (id_transaksi,id_barang,nama_barang,jumlah,harga,total) values (?,?,?,?,?,?)");
+              this.stat.setInt(1,0);
+              this.stat.setInt(2,ksr.id_barang);
+              this.stat.setString(3,ksr.nama_barang);
+              this.stat.setInt(4,ksr.jumlah);
+              this.stat.setInt(5,ksr.harga);
+              this.stat.setInt(6,ksr.total);
+              this.stat.executeUpdate();
+              refreshTable2();
+          } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e.getMessage());   
+          }
+    }//GEN-LAST:event_tombol_inputActionPerformed
 
     /**
      * @param args the command line arguments
@@ -614,12 +624,15 @@ public class menu_kasir extends javax.swing.JFrame {
     private javax.swing.JPanel MenuHome;
     private javax.swing.JPanel MenuStore;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
+    private javax.swing.JLabel jLabel15;
+    private javax.swing.JLabel jLabel16;
+    private javax.swing.JLabel jLabel18;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
@@ -627,19 +640,17 @@ public class menu_kasir extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel9;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane3;
-    private javax.swing.JTable jTable1;
     private javax.swing.JTextField kembalian;
-    private javax.swing.JTextField kolom_barang;
-    private javax.swing.JTextField kolom_harga;
-    private javax.swing.JTextField kolom_id;
     private javax.swing.JTextField kolom_jumlah;
     private javax.swing.JPanel main_menu;
+    private javax.swing.JComboBox<String> pilih_barang;
     private javax.swing.JPanel sub_menu;
     private javax.swing.JTable tabel_kasir;
-    private javax.swing.JButton tombol_hapus;
-    private javax.swing.JButton tombol_tambah;
-    private javax.swing.JButton tombol_ubah;
-    private javax.swing.JTextField total;
-    private javax.swing.JTextField uang_bayar;
+    private javax.swing.JTable table_store;
+    private javax.swing.JButton tombol_bayar;
+    private javax.swing.JButton tombol_bersih;
+    private javax.swing.JButton tombol_input;
+    private javax.swing.JTextField total_bayar;
+    private javax.swing.JTextField total_harga;
     // End of variables declaration//GEN-END:variables
 }
